@@ -4,10 +4,11 @@ var async = require("async");
 var conn = require("./config/databaseConnection");
 var TaxiCode  =  require("./taxicode/index");
 var p2papi  =  require("./p2papi/index");
-var Mozio  =  require("./mozio/index");
-//const settings =  require('./config/settings')
+var Mozio  =  require("./mozio/index"); 
+var CreateLogs = require('./lib/CreateLogs')
 
 module.exports=function AsyncCall(request,FullData){
+ 
     //read settings file
     var fs = require("fs");
     var content = fs.readFileSync("./config/settings.json");
@@ -16,6 +17,7 @@ module.exports=function AsyncCall(request,FullData){
     //console.log("From Aync: " +request.id)
     var stack = [];
     var retval;
+    var test;
     
     if(settings.provider.mozio===1 && request.Mozio!="-1"){
       // Mozio api
@@ -48,16 +50,21 @@ module.exports=function AsyncCall(request,FullData){
     }
 
 
-    // var functiontest = function(callback) {  
-    //   testsql(request,function(data){
-    //     callback(null, data);
-    //   })
-    // }  
-    // stack.push(functiontest);
     async.parallel(stack, function(err, result) {  
          //console.log('Async parallel with array', result);
          if(err){
            console.log("Async Error: " + err)
+           var testObj={
+            "SessionId":request.sessionid,
+            "PartnerName": "ALL",
+            "Category": "Error",
+            "Category": "Error calling async parallel",
+            "Body":err
+            }
+            CreateLogs(testObj,function(err,str){
+                // loggin error
+                if(err)  console.log("error on logging")
+            });            
          }
          else{
            FullData(result)

@@ -51,11 +51,11 @@ module.exports = async function insert(result,sessionid,tflag,callback){
                     TotalCostPriceReturn=Price;
                 }
                 
-                 var sqlQuery=`INSERT INTO APISearchData (sessionid,PriceID,SearchTimeStamp,Pricing,Distance,UnitID,Vehicle,OccupancyFrom,OccupancyTo,CurID,TotalCostPriceSingle,TotalCostPriceReturn,Min_Stops,Max_Stops,NumUnits,company_logo,Transferflag,VehicleImage,company,TransferType,company_sessionid,company_searchid)
+                 var sqlQuery=`INSERT INTO APISearchData (sessionid,PriceID,SearchTimeStamp,Pricing,Distance,UnitID,Vehicle,OccupancyFrom,OccupancyTo,CurID,TotalCostPriceSingle,TotalCostPriceReturn,Min_Stops,Max_Stops,NumUnits,company_logo,Transferflag,VehicleImage,company,TransferType,company_sessionid,company_search_Resultid)
                  values ('${sessionid}','${PriceID}',getdate(),'${Pricing}','${Distance}','${UnitID}','${Vehiclename}','${OccupancyFrom}','${OccupancyTo}','${CurID}','${TotalCostPriceSingle}','${TotalCostPriceReturn}','${Min_Stops}','${Max_Stops}','${NumUnits}','${company_logo}','${Transferflag}','${VehicleImage}','${company_name}',1,'${company_sessionid}','${company_searchid}')`
                  //let result1 = pool.request()
                  var request = new sql.Request(sqlConn);
-                 let result = sql.query `INSERT INTO APISearchData (sessionid,PriceID,SearchTimeStamp,Pricing,Distance,UnitID,Vehicle,OccupancyFrom,OccupancyTo,CurID,TotalCostPriceSingle,TotalCostPriceReturn,Min_Stops,Max_Stops,NumUnits,company_logo,Transferflag,VehicleImage,company,TransferType,company_sessionid,company_searchid)
+                 let result = sql.query `INSERT INTO APISearchData (sessionid,PriceID,SearchTimeStamp,Pricing,Distance,UnitID,Vehicle,OccupancyFrom,OccupancyTo,CurID,TotalCostPriceSingle,TotalCostPriceReturn,Min_Stops,Max_Stops,NumUnits,company_logo,Transferflag,VehicleImage,company,TransferType,company_sessionid,company_search_Resultid)
                  values (${sessionid},${PriceID},getdate(),${Pricing},${Distance},${UnitID},${Vehiclename},${OccupancyFrom},${OccupancyTo},${CurID},${TotalCostPriceSingle},${TotalCostPriceReturn},${Min_Stops},${Max_Stops},${NumUnits},${company_logo},${Transferflag},${VehicleImage},${company_name},1,${company_sessionid},${company_searchid})`                   
 
             })
