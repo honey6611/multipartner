@@ -24,7 +24,7 @@ let str={
     'currencyid':'GBP'    
 }
 describe('P2papi',function(){
-    it('P2p test  should return a object', function(done){
+    it('P2P test  should return a object', function(done){
         this.timeout(4000);
         setTimeout(()=>{
             p2papi(str,function(err,ret){

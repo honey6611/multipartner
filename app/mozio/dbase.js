@@ -24,13 +24,13 @@ module.exports = async function insert(result,sessionid,tflag,callback){
             CurID=json.currency_info.code;
             passenger= json.num_passengers;
             OccupancyTo=passenger;
-            company_searchid = json.search_id;
+            company_sessionid = json.search_id;
             Pricing=0; UnitID=0;Min_Stops=0;Max_Stops=0;
             Distance=0;
             SearchTimeStamp = moment(Date.now()).format('YYYY-MM-DD HH:mm:ss');
             _.forOwn(json.results,  function(value, key){
                 //console.log(json.results[key].result_id)
-                company_sessionid=json.results[key].result_id;
+                company_searchid=json.results[key].result_id;
                 Price= json.results[key].total_price.total_price.value;
                 Vehiclename= json.results[key].steps[0].details.vehicle.vehicle_type.name;
                 count= json.results[key].steps[0].details.vehicle.num_vehicles;

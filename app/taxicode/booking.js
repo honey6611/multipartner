@@ -1,12 +1,18 @@
 let https = require('https');
 let querystring = require('querystring');
-let setting = require('../config/settings.json');
+let setting = require('../../config/settings.json');
 let moment = require('moment');
-var CreateLogs = require('../lib/CreateLogs')
+var CreateLogs = require('../../lib/CreateLogs');
+const sql = require('mssql');
+var sqlConn = sql.globalConnection;
+
 module.exports = function booking(data, callback){
         var tc_apiKey       = "WIbKkK6MWjbGFjmy"
         var tc_secretKey    = "ac6G7isG0R98SeyE"   
-        var tf = moment();         
+        var tf = moment();  
+        var sessionid=data.sessionid;
+        var ApisearchDataID = data.id;
+
         var tc_DataToSend = `quote=${data.quote}&vehicle=${data.vehicle}&test=1&name=${data.name}&email=${data.email}&telephone=${data.telephone}&key=${tc_apiKey}&method=authorised_payment_handler`      
 
         var options = {

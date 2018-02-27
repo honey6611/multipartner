@@ -2,9 +2,9 @@
 // Make sure you add "async" to your package.json
 var async = require("async");
 var conn = require("./config/databaseConnection");
-var TaxiCode  =  require("./taxicode/index");
-var p2papi  =  require("./p2papi/index");
-var Mozio  =  require("./mozio/index"); 
+var TaxiCode  =  require("./app/taxicode/index");
+var p2papi  =  require("./app/p2papi/index");
+var Mozio  =  require("./app/mozio/index"); 
 var CreateLogs = require('./lib/CreateLogs')
 
 module.exports=function AsyncCall(request,FullData){
@@ -18,8 +18,7 @@ module.exports=function AsyncCall(request,FullData){
     var stack = [];
     var retval;
     var test;
-    
-    if(settings.provider.mozio===1 && request.Mozio!="-1"){
+    if(settings.provider.mozio.active===1 && request.Mozio!="-1"){
       // Mozio api
       var functionThree = function(callback) {  
         Mozio(request,function(data){
@@ -29,7 +28,7 @@ module.exports=function AsyncCall(request,FullData){
       stack.push(functionThree); 
     }    
        
-    if(settings.provider.taxicode===1 && request.TaxiCode!="-1"){
+    if(settings.provider.taxicode.active===1 && request.TaxiCode!="-1"){
       // taxi code
       var functionOne = function(callback) { 
           TaxiCode(request,function(data){
@@ -39,7 +38,7 @@ module.exports=function AsyncCall(request,FullData){
       stack.push(functionOne); 
     }
 
-    if(settings.provider.p2p===1 && request.P2P!="-1"){
+    if(settings.provider.p2p.active===1 && request.P2P!="-1"){
       // P2P api
       var functionTwo = function(callback) {  
         p2papi(request,function(data){

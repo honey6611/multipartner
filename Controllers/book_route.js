@@ -11,7 +11,7 @@ var express = require('express')
 
   var async = require('../async')
   var CreateLogs = require('../lib/CreateLogs')
-  var Booking = require('../taxicode/booking')
+  var Booking = require('../app/taxicode/booking')
 
 router.get('/',[
     check('Quote', 'Quote cannot be empty and must be atleast 10 characters long').isLength({ min: 10 }).isAlphanumeric(),
@@ -21,7 +21,7 @@ router.get('/',[
     
 ],  (req, res, next)=> {
     booking(req,(err,response)=>{
-        console.log(response)
+        //console.log(response)
     })
     res.writeHead(200, {'Content-Type': 'text/html'});
     res.end("Get method for Book not implemented")
@@ -34,7 +34,7 @@ router.post('/', [], (req, res, next)=> {
     check('Email', 'Email is either empty or invalid').isEmail()
 
     booking(req,(err,response)=>{
-        console.log(response)
+        //console.log(response)
     })
     res.writeHead(200, {'Content-Type': 'text/html'});
     res.end("Post method for booking not implemented")

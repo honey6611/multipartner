@@ -1,9 +1,19 @@
 {   
     "provider":{
-        "p2p":1,
-        "taxicode" :0,
-        "mozio":1
+        "p2p":{
+           "id" :123,
+           "active":1
+        },
+        "taxicode" :{
+            "id":234,
+            "active":1
+        },
+        "mozio":{
+            "id":345,
+            "active":1
+        }
     },
     "timeout":30000
 
 }
+

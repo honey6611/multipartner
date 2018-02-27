@@ -1,9 +1,9 @@
 
 var http = require('http');
-var totalUrl = 2;
+var totalUrl = 5;
 var currentUrl = 0;
  
-var totalLoop = 1;
+var totalLoop = 2;
 for( var i = 0; i < totalLoop; i++ ) {
     setTimeout(function(){
         getNextUrl();},4000)
@@ -22,7 +22,7 @@ function getNextUrl(){
    if(process.argv[2]=='undefine')
         var options = {
         host: 'localhost',
-        port: 3000,
+        port: 3001,
         path: '/search/?callid='+idToFetch+'&sessionid=99999&AgentID=60042&CodeFrom=ALC&CodeTo=BEN&Adults=2&Child=0&Infant=0&FromDate=20180415&ToDate=20180428&FromTime=1400&ToTime=1200&FromLat=51.4703&FromLong=-0.45342&ToLat=50.8197675&ToLong=-1.0879769000000579&currencyid=USD',
         agent: false,
         pageId: idToFetch
