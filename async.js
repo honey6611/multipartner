@@ -6,9 +6,7 @@ var TaxiCode  =  require("./app/taxicode/index");
 var p2papi  =  require("./app/p2papi/index");
 var Mozio  =  require("./app/mozio/index"); 
 var CreateLogs = require('./lib/CreateLogs')
-
 module.exports=function AsyncCall(request,FullData){
- 
     //read settings file
     var fs = require("fs");
     var content = fs.readFileSync("./config/settings.json");

@@ -44,11 +44,19 @@ else{
     }
     else{
         // below code to run as a console app
-        var server = app.listen(port, function () {
-          //console.log(`Server is running at port ${port}. Worker ${cluster.worker.id} running!`);
-          console.log(`Server is running at port ${port}.`);
+        var server = app.listen(port, function (err) {
+            //console.log(`Server is running at port ${port}. Worker ${cluster.worker.id} running!`);
+            console.log(`Server is running at port ${port}.`);
         });
     }
+
+    process.on('uncaughtException', function(err) {
+        if(err.errno === 'EADDRINUSE')
+             console.log('Port already in use');
+        else
+             console.log(err);
+        process.exit(1);
+    }); 
     
 }
 

@@ -10,6 +10,8 @@ const { matchedData, sanitize } = require('express-validator/filter');
 var js2xmlparser = require("js2xmlparser");  
 
   
+var updatetbl = require('../lib/getResponseDetails')
+
 var async = require('../async')
 var CreateLogs = require('../lib/CreateLogs')
 
@@ -22,8 +24,8 @@ let js2xmlparser_options = {
 router.get('/',[
     check('AgentID', 'AgentID cannot be empty and must be atleast 4 characters long').isLength({ min: 4 }).isNumeric(),
     check('sessionid', 'sessionid cannot be empty and must be atleast 4 characters long').isLength({ min: 4 }),
-    check('CodeFrom', 'CodeFrom cannot be empty and must be 3 characters long').isLength({ min: 3, max: 3 }),
-    check('CodeTo', 'CodeTo cannot be empty and must be 3 characters long').isLength({ min: 3, max: 3 }),
+    //check('CodeFrom', 'CodeFrom cannot be empty and must be 3 characters long').isLength({ min: 3, max: 3 }),
+    //check('CodeTo', 'CodeTo cannot be empty and must be 3 characters long').isLength({ min: 3, max: 3 }),
     check('Adults', 'Adults cannot be empty and needs to be between 0 - 50').isLength({ min: 1, max: 50 }).isNumeric(),
     check('Children', 'Children minimum value 1 and max 50').optional({ checkFalsy: true }).isInt(),
     check('Infant', 'Infants minimum value 1 and max 50').optional({ checkFalsy: true }).isInt(),        
@@ -66,11 +68,16 @@ router.get('/',[
                     var testObj={"SessionId":req.body.sessionid,"PartnerName": "ALL","Category": "Info","SubCategory": "Overall processing Time","Body": "Process completed in : " + output + " sec"}
                     CreateLogs(testObj,function(err,str){if(err)  console.log("error on logging")});     
                 }
-                res.end(`<?xml version='1.0' encoding='UTF-8'?><TCOM>
-                <ResponseTime>${output}</ResponseTime>
-                <result>
-                    <sessionid>${req.query.sessionid}</sessionid>
-                </result></TCOM>`)
+                updatetbl(req.query.sessionid,output, function(err,recCnt){
+                    //console.log(err)
+                    res.end(`<?xml version='1.0' encoding='UTF-8'?><TCOM>
+                    <ResponseTime>${output}</ResponseTime>
+                    <ResultCount>${recCnt}</ResultCount>
+                    <result>
+                        <sessionid>${req.query.sessionid}</sessionid>
+                    </result></TCOM>`)
+                })
+
             }) 
         }           
 })
@@ -78,8 +85,8 @@ router.get('/',[
 router.post('/',[
     check('AgentID', 'AgentID cannot be empty and must be atleast 4 characters long').isLength({ min: 4 }).isNumeric(),
     check('sessionid', 'sessionid cannot be empty and must be atleast 4 characters long').isLength({ min: 4 }),
-    check('CodeFrom', 'CodeFrom cannot be empty and must be 3 characters long').isLength({ min: 3, max: 3 }),
-    check('CodeTo', 'CodeTo cannot be empty and must be 3 characters long').isLength({ min: 3, max: 3 }),
+    //check('CodeFrom', 'CodeFrom cannot be empty and must be 3 characters long').isLength({ min: 3, max: 3 }),
+    //check('CodeTo', 'CodeTo cannot be empty and must be 3 characters long').isLength({ min: 3, max: 3 }),
     check('Adults', 'Adults cannot be empty and needs to be between 0 - 50').isLength({ min: 1, max: 50 }).isNumeric(),
     check('Children', 'Children minimum value 1 and max 50').optional({ checkFalsy: true }).isInt(),
     check('Infants', 'Infants minimum value 1 and max 50').optional({ checkFalsy: true }).isInt(),        
@@ -112,11 +119,15 @@ router.post('/',[
                     var testObj={"SessionId":req.body.sessionid,"PartnerName": "ALL","Category": "Info","SubCategory": "Overall Processing time","Body": "Process completed in : " + output + " sec"}
                     CreateLogs(testObj,function(err,str){if(err)  console.log("error on logging")});     
                 }
-                res.end(`<?xml version='1.0' encoding='UTF-8'?><TCOM>
-                <ResponseTime>${output}</ResponseTime>
-                <result>
-                    <sessionid>${req.body.sessionid}</sessionid>
-                </result></TCOM>`)
+                updatetbl(req.body.sessionid,output, function(err,recCnt){
+                    //console.log(err)
+                    res.end(`<?xml version='1.0' encoding='UTF-8'?><TCOM>
+                    <ResponseTime>${output}</ResponseTime>
+                    <ResultCount>${recCnt}</ResultCount>
+                    <result>
+                        <sessionid>${req.body.sessionid}</sessionid>
+                    </result></TCOM>`)
+                })
             })
         }    
 })

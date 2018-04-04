@@ -11,6 +11,7 @@ module.exports = async function insert(result,sessionid,tflag,callback){
     var company_name,company_logo,SearchTimeStamp
     var PriceID,Vehiclename,VehicleImage,passenger,luggage_big,luggage_small,NumUnits,id,vehicleclass,Transferflag,sessionid,OccupancyFrom
     var CurID,UnitID,Min_Stops,Max_Stops,Transferflag,company_sessionid,company_searchid
+    var Luggage_Big,Luggage_Small,PartnerRating,PartnerReviewCount
     var json = JSON.parse(result); 
     var table
     // try{await sql.close(); }                    
@@ -40,7 +41,9 @@ module.exports = async function insert(result,sessionid,tflag,callback){
                 NumUnits= json.results[key].steps[0].details.vehicle.num_vehicles;
                 company_name=json.results[key].steps[0].details.provider.name;
                 company_logo=json.results[key].steps[0].details.provider.logo_url;
-
+                duration= json.results[key].steps[0].details.time;
+                Luggage_Big = json.results[key].steps[0].details.vehicle.max_bags;
+                PartnerRating = json.results[key].steps[0].details.provider.rating;
                 Transferflag=tflag
                 if (Transferflag===1){
                     TotalCostPriceSingle=Price;
@@ -51,12 +54,13 @@ module.exports = async function insert(result,sessionid,tflag,callback){
                     TotalCostPriceReturn=Price;
                 }
                 
-                 var sqlQuery=`INSERT INTO APISearchData (sessionid,PriceID,SearchTimeStamp,Pricing,Distance,UnitID,Vehicle,OccupancyFrom,OccupancyTo,CurID,TotalCostPriceSingle,TotalCostPriceReturn,Min_Stops,Max_Stops,NumUnits,company_logo,Transferflag,VehicleImage,company,TransferType,company_sessionid,company_search_Resultid)
-                 values ('${sessionid}','${PriceID}',getdate(),'${Pricing}','${Distance}','${UnitID}','${Vehiclename}','${OccupancyFrom}','${OccupancyTo}','${CurID}','${TotalCostPriceSingle}','${TotalCostPriceReturn}','${Min_Stops}','${Max_Stops}','${NumUnits}','${company_logo}','${Transferflag}','${VehicleImage}','${company_name}',1,'${company_sessionid}','${company_searchid}')`
+                 var sqlQuery=`INSERT INTO APISearchData (sessionid,PriceID,SearchTimeStamp,Pricing,Distance,UnitID,Vehicle,VehicleClass,OccupancyFrom,OccupancyTo,CurID,TotalCostPriceSingle,TotalCostPriceReturn,Min_Stops,Max_Stops,NumUnits,company_logo,Transferflag,VehicleImage,company,TransferType,company_sessionid,company_search_Resultid,duration,luggage_Big, PartnerRating)
+                 values (${sessionid},${PriceID},getdate(),${Pricing},${Distance},${UnitID},${Vehiclename},${vehicleclass},${OccupancyFrom},${OccupancyTo},${CurID},${TotalCostPriceSingle},${TotalCostPriceReturn},${Min_Stops},${Max_Stops},${NumUnits},${company_logo},${Transferflag},${VehicleImage},${company_name},2,${company_sessionid},${company_searchid},${duration},${Luggage_Big},${PartnerRating})` 
                  //let result1 = pool.request()
+                 //console.log(sqlQuery)
                  var request = new sql.Request(sqlConn);
-                 let result = sql.query `INSERT INTO APISearchData (sessionid,PriceID,SearchTimeStamp,Pricing,Distance,UnitID,Vehicle,OccupancyFrom,OccupancyTo,CurID,TotalCostPriceSingle,TotalCostPriceReturn,Min_Stops,Max_Stops,NumUnits,company_logo,Transferflag,VehicleImage,company,TransferType,company_sessionid,company_search_Resultid)
-                 values (${sessionid},${PriceID},getdate(),${Pricing},${Distance},${UnitID},${Vehiclename},${OccupancyFrom},${OccupancyTo},${CurID},${TotalCostPriceSingle},${TotalCostPriceReturn},${Min_Stops},${Max_Stops},${NumUnits},${company_logo},${Transferflag},${VehicleImage},${company_name},1,${company_sessionid},${company_searchid})`                   
+                 let result = sql.query `INSERT INTO APISearchData (sessionid,PriceID,SearchTimeStamp,Pricing,Distance,UnitID,Vehicle,VehicleClass,OccupancyFrom,OccupancyTo,CurID,TotalCostPriceSingle,TotalCostPriceReturn,Min_Stops,Max_Stops,NumUnits,company_logo,Transferflag,VehicleImage,company,TransferType,company_sessionid,company_search_Resultid,duration,luggage_Big, PartnerRating)
+                 values (${sessionid},${PriceID},getdate(),${Pricing},${Distance},${UnitID},${Vehiclename},${vehicleclass},${OccupancyFrom},${OccupancyTo},${CurID},${TotalCostPriceSingle},${TotalCostPriceReturn},${Min_Stops},${Max_Stops},${NumUnits},${company_logo},${Transferflag},${VehicleImage},${company_name},2,${company_sessionid},${company_searchid},${duration},${Luggage_Big},${PartnerRating})`                   
 
             })
     
