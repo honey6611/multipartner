@@ -14,14 +14,15 @@ var updatetbl = require('../lib/getResponseDetails')
 
 var async = require('../async')
 var CreateLogs = require('../lib/CreateLogs')
-
 let js2xmlparser_options = {
     declaration: {
         encoding: "UTF-8",
         version: "1.0"
     }
 }
+
 router.get('/',[
+
     check('AgentID', 'AgentID cannot be empty and must be atleast 4 characters long').isLength({ min: 4 }).isNumeric(),
     check('sessionid', 'sessionid cannot be empty and must be atleast 4 characters long').isLength({ min: 4 }),
     //check('CodeFrom', 'CodeFrom cannot be empty and must be 3 characters long').isLength({ min: 3, max: 3 }),
@@ -39,9 +40,10 @@ router.get('/',[
     check('ToTime', 'ToTime is invalid or empty HHMM').optional({ checkFalsy: true }).isLength({ min: 4, max: 4 }).isDecimal(),   
     check('currencyid', 'currencyid is invalid or empty').isLength({ min: 3, max: 3 }).isAlpha()           
 ],  (req, res, next) => {
-    
+    req.query.log_info=1; // set this to create logs  
     res.setHeader('Content-Type', 'text/xml');
         // normal processing here
+       
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             res.end(js2xmlparser.parse("Errors", errors.mapped(),js2xmlparser_options));
@@ -65,7 +67,7 @@ router.get('/',[
                 var output =  tt.diff(tf,'seconds',true);
                 console.log("Process completed in : " + output + " sec")
                 if(req.body.log_info != undefined){
-                    var testObj={"SessionId":req.body.sessionid,"PartnerName": "ALL","Category": "Info","SubCategory": "Overall processing Time","Body": "Process completed in : " + output + " sec"}
+                    var testObj={"SessionId":req.query.sessionid,"PartnerName": "ALL","Category": "Info","SubCategory": "Overall processing Time","Body": "Process completed in : " + output + " sec"}
                     CreateLogs(testObj,function(err,str){if(err)  console.log("error on logging")});     
                 }
                 updatetbl(req.query.sessionid,output, function(err,recCnt){
@@ -100,6 +102,7 @@ router.post('/',[
     check('ToTime', 'ToTime is invalid or empty HHMM').optional({ checkFalsy: true }).isLength({ min: 4, max: 4 }).isDecimal(),   
     check('currencyid', 'currencyid is invalid or empty').isLength({ min: 3, max: 3 }).isAlpha()           
 ], function (req, res) {
+        req.body.log_info=1; // set this to create
         res.setHeader('Content-Type', 'text/xml');
         // normal processing here
         const errors = validationResult(req);
@@ -108,7 +111,7 @@ router.post('/',[
             var testObj={"SessionId":req.body.sessionid,"PartnerName": "ALL","Category": "Error","SubCategory": "Required parameters missing or invalid","Body": js2xmlparser.parse("Errors", errors.mapped(),js2xmlparser_options)}
             CreateLogs(testObj,function(err,str){if(err)  console.log("error on logging")});                
         }
-        else{            
+        else{        
            var tf = moment();
            prams = req.body;
             async(prams,function(data){
@@ -121,14 +124,27 @@ router.post('/',[
                 }
                 updatetbl(req.body.sessionid,output, function(err,recCnt){
                     //console.log(err)
-                    res.end(`<?xml version='1.0' encoding='UTF-8'?><TCOM>
-                    <ResponseTime>${output}</ResponseTime>
-                    <ResultCount>${recCnt}</ResultCount>
-                    <result>
-                        <sessionid>${req.body.sessionid}</sessionid>
-                    </result></TCOM>`)
+                    if (req.body.ResponseType==1){}
+                    else{
+                        res.end(`<?xml version='1.0' encoding='UTF-8'?><TCOM>
+                        <ResponseTime>${output}</ResponseTime>
+                        <ResultCount>${recCnt}</ResultCount>
+                        <result>
+                            <sessionid>${req.body.sessionid}</sessionid>
+                        </result></TCOM>`)
+                    }
                 })
             })
+            if(req.body.ResponseType==1){
+                tt=moment();
+                var output =  tt.diff(tf,'seconds',true);                
+                res.end(`<?xml version='1.0' encoding='UTF-8'?><TCOM>
+                <ResponseTime>${output}</ResponseTime>
+                <ResultCount>0</ResultCount>
+                <result>
+                    <sessionid>${req.body.sessionid}</sessionid>
+                </result></TCOM>`)
+            }
         }    
 })
 

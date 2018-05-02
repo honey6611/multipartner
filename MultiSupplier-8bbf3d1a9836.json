@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "multisupplier-202013",
+  "private_key_id": "8bbf3d1a983641e6134b3c54101e77fe87ab20f3",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCQUqHauqXP2r9z\nJ/z2RKhyrmluUvI7gV7mgAa86083yJtZ60WQ8BF/WrM9MGWAtKqwWzub9/JWJjpW\nuGZZt7N5hk/7Xu+IwbvkjuEsZQwJYjzDMe3fl4iOaemsEM4edy+EfGVS6qKvqCzU\ncecNC9n8dzm31Sl0eopjG5jdLOiXbRWfpZoLOLqeh2N/Hw9mWpdUIVuK+vLd5Ezg\n/mFexPOn68MWA59WIsnOZE9s9nkNvwWqw3uVtbk3RnWPCAkfyZttXs1Z+TCi41k5\nxz5F6e02OyiC9ZyQg0fDfI7RFin+CVlpKcKbmFcTIkgwCzNvcfXeScS9mUmBvmHY\nbk90sTChAgMBAAECggEAIMV6tkGyvBeGaJ44bS1a+KuNCj2wfn2acIm6vfRKyTZ2\nvDzVz5sLxhjw4WCXc9nSdnhI+Vocf55vmdiGeTHjAaHTkJdWmf2v7i7Zh6ysRoc1\nl/dC9gYhPoFjS6yHOVjEA/gBRAo+hdeQ0m7I0egSiCcEhq9TGf1nZijSlcqISDXo\nKrJhuiAeKqUtZOpyklekt9oCduhED0tlxpQaw5giW9uTiOy3mMxUalvI5fyC/9Cx\nnPvKQ3ppk5vHVeHBm1o9XO+Hc2mptPVDqpRbKElAWNv3PDHGsq5prz4g1OBPOJOm\n/Gjf6JZokgQeZFkjQFZ3EWZ6oq0Oj17VePuE8vhwCQKBgQDBrWhXoEHcLWLWcxm2\nk5xS310Isz85zbocrYStTHRJgjpv6bvvk4rsLeDajl6nePA7z+tjRoMSHfpshU1A\nW+yzrwhdsuFiuDFIJZHXLseXqoxdExFMYOEf9XhrP/f85BBPnzeUqQXdOUcCRrC7\nXlvyBB8dXMYM+Q5IAs3eMAciDQKBgQC+w4iS1vb3lDiz/fF8oBhdZC4AjAvwZOfG\nzSXi+I5WLoBirCamDsAQgBeBiNb8m53dmbDpb7Uq6/ZOqaJvJ7Ep/NG4ZQ8ZCc6R\nuPCj1IcAVLB8zSfGYrkfi3rYDl4J/jORou7YZltxN3PTuLIHQuah18iDNzwQmY6M\nzWmi4W7n5QKBgFYEoUoBuB6E3dfm6O2o443+/D/n9FXE5Drmaf3Z7e/T8gZQZhLC\nkbnRqoMHJkz1LqUx9BZ0c7QxMk7OaYADE76+J1YOI4IH0oN7hClw8l6O9aZE2LL2\neCYMjL39fDOKSyBB05qn8x3M2ZfOM6IUB3wWjoco9CFA4DHlZO+gnxplAoGAKtaE\nC92EFjLNzPWgzgixj/9YKT1JzRELz2PwNxjz9bx5ji70euPjE5GANdGB3bYgbEwA\nI1u3hkz4wc9sL6PtL+2bNtpS2p+OKMEsIM4wBs391/jGDtHKmp/a1TvcuEfCUtkQ\n472QmUsHkqruJ51JZ1yqpXS4401oaowSRcZz/lUCgYEAtpxyRRgoxXkY48Ki+M0Y\nZ24TGStipTHVCICMngDeoaCfFX7jPj4+Jpa9KvOpGhhBB916+mJEiN+G+c2yCgak\nyd9pp+TvbLZcurmFQzmC7BVdJ+J2nduqXku+yMN4/pL13Elqe/N7Vu9w+Yn7zUyL\nV/gwINNtRlh/srzW8ERI2g4=\n-----END PRIVATE KEY-----\n",
+  "client_email": "multipartnertoollogs@multisupplier-202013.iam.gserviceaccount.com",
+  "client_id": "113614807363312206044",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://accounts.google.com/o/oauth2/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/multipartnertoollogs%40multisupplier-202013.iam.gserviceaccount.com"
+}

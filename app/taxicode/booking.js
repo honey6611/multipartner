@@ -12,9 +12,20 @@ module.exports = function booking(data, callback){
         var tf = moment();  
         var sessionid=data.sessionid;
         var ApisearchDataID = data.id;
-
-        var tc_DataToSend = `quote=${data.quote}&vehicle=${data.vehicle}&test=1&name=${data.name}&email=${data.email}&telephone=${data.telephone}&key=${tc_apiKey}&method=authorised_payment_handler`      
-
+        var Quote,vehicle,FirstName,LastName,Email,Journey1_FlightNumber,Notes,CustomerName
+        var retObj={}
+        //console.log(data)
+        Quote= data.searchData.Company_Search_ResultId ;
+        vehicle=data.searchData.PriceID ;
+        FirstName=data.FirstName ;
+        LastName=data.LastName ;
+        Email=data.Email ;
+        Phone=data.Phone ;
+        Journey1_FlightNumber= (data.Journey1_FlightNumber=='' || data.Journey1_FlightNumber==undefined) ? '' : data.Journey1_FlightNumber ;
+        Notes= (data.Notes=='' || data.Notes==undefined) ? '' : data.Notes;
+        CustomerName= FirstName+' '+LastName
+        var tc_DataToSend = `quote=${Quote}&vehicle=${vehicle}&test=1&name=${CustomerName}&email=${Email}&telephone=${Phone}&flight_number=${Journey1_FlightNumber}&notes=${Notes}&key=${tc_apiKey}&method=authorised_payment_handler`      
+        //console.log(tc_DataToSend)
         var options = {
             host: 'api.taxicode.com',
             port: 443,
@@ -45,7 +56,20 @@ module.exports = function booking(data, callback){
                         CreateLogs(testObj,function(err,str){if(err)  console.log("error on logging")});     
                     }
                     //end of logging
-                    return callback(null,JSON.parse(result));     // Return Control to async
+                    let result1 = sql.query `insert into [APIBookingData] (BookingRef,BookingResponse,PartnerId,CustomerName,CustomerEmail,CustomerTelephone,Journey1_FlightNumber,Notes) 
+                    values(${JSON.parse(result).reference},${JSON.stringify(result)},${data.PartnerId},${CustomerName},${Email},${Phone},${Journey1_FlightNumber},${Notes})
+                    ; select @@IDENTITY as 'Identity'`
+                    //console.log(result1)
+                    retObj.returnpayload=JSON.parse(result);
+                    result1.then((re)=>{
+                        retObj.APIBookingDataID=re.recordset[0].Identity;
+                        //console.log("return object " +retObj)
+                        return callback (null, retObj);                    
+                    }).catch((err)=>{
+                        console.log(err)
+                        retObj.APIBookingDataID='';
+                        return callback (null, retObj)
+                    })                    
                     //return;
                 //}); // INSERT INTO DATABASE
 
@@ -56,7 +80,19 @@ module.exports = function booking(data, callback){
                 var testObj={"SessionId":data.sessionid,"PartnerName": "TaxiCode","Category": "Error","SubCategory": "HTTP ERROR","Body": JSON.stringify(result)}
                 CreateLogs(testObj,function(err,str){if(err)  console.log("error on logging")});                  
                 //end of logging
-                return callback ('Error: '+JSON.parse(result), null)
+                let result1 = sql.query `insert into [APIBookingData] (BookingRef,BookingResponse,PartnerId,CustomerName,CustomerEmail,CustomerTelephone,Journey1_FlightNumber,Notes) 
+                values('',${JSON.stringify(result)},${data.PartnerId},${CustomerName},${Email},${Phone},${Journey1_FlightNumber},${Notes})                
+                ; select @@IDENTITY as 'Identity'`
+
+                retObj.bookingRef=JSON.parse(result);
+                result1.then((re)=>{
+                    //console.log(re)
+                    retObj.APIBookingDataID=re.recordset[0].Identity;
+                    return callback (retObj, null);                       
+                }).catch((err)=>{
+                    return callback (retObj, null);                                           
+                })
+               
             }
         });
         });

@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <style>
+            .toollogs{
+                width:100%;
+                overflow:auto;
+                height:500px;
+            }
+/* cpu graph			*/
+			body {
+			  font: 10px sans-serif !important;
+			}
+			.axis path,
+			.axis line {
+			  fill: none;
+			  stroke: green;
+			  shape-rendering: crispEdges;
+			}
+
+			.x.axis path {
+			  display: none;
+			}
+
+			.line {
+			  fill: none;
+			  stroke: greenyellow;
+			  stroke-width: 1.5px;
+			}		
+			.mchart{
+				border:2px solid white;
+				color: white;
+				background-color: black;
+			}
+			.chartcontainer{
+				padding: 2px;
+				color: gray;	
+			}
+			#totalmem , #freemem{
+				color: greenyellow;
+			}
+        </style>
+	<script src="https://d3js.org/d3.v3.js"></script>	
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">		
+    </head>
+<body>
+	
+
+	<div class="row">
+		<div class="col">
+		<!--div id="chart1" style="border:2px solid red"></div>
+		<div id="chart2"  style="border:2px solid black"></div-->
+			<div id="chartcontainer" class="row"></div>
+		</div>
+	</div>
+	<div class="row">
+			<div class="card bg-dark text-white col" style="width:400px">
+					<div class="card-body">
+					  <h4 class="card-title">Total Memory</h4>
+					  <h4 class="card-text" id="totalmem"></h4>
+					</div>
+			</div>							
+			<div class="card bg-dark text-white col" style="width:400px">
+					<div class="card-body">
+					  <h4 class="card-title">Free Memory</h4>
+					  <h4 class="card-text" id="freemem"></h4>
+					</div>
+			</div>		
+	</div>
+
+	<div class="row">
+			<div class="col">	
+											
+				<!--div class="toollogs " id="cpu-usage"></div-->
+				<!--div class="toollogs" id="fulllist" style="height:400px">
+					<ul id="eventlist"> </ul>
+				</div-->
+				<div class="card bg-dark text-white col toollogs" style="width:400px">
+						<div class="card-body">
+						  <h4 class="card-title">Console</h4>
+						  <div class="card-text" id="fulllist" style="height:400px">
+								<ul id="eventlist"> </ul>
+						  </div>
+						</div>
+				</div>				
+				<div id="numberofcpu" ></div>
+			</div>
+			</div>	
+	<script>
+	function chrt(objid,cpuText){
+		var timeoutId = 0;
+		var data = [];
+
+		var margin = {top: 20, right: 20, bottom: 30, left: 50},
+			width = 480 - margin.left - margin.right,
+			height = 320 - margin.top - margin.bottom;
+
+		var parseDate = d3.time.format("%H:%M:%S").parse;
+
+		var xcenter =  width/2;
+
+		var x = d3.time.scale()
+			.range([0, width]);
+			
+		var y = d3.scale.linear()
+			.range([height, 0]);
+
+		var xAxis = d3.svg.axis()
+			.scale(x)
+			.orient("bottom")
+			.tickFormat(d3.time.format("%S"));
+
+		var yAxis = d3.svg.axis()
+			.scale(y)
+			.orient("left");
+
+		var line = d3.svg.line()
+			.x(function(d) { return x(d.creatTime);})
+			.y(function(d) { return y(d.cpuTime); });
+
+		// function
+
+		function myGetTime() {
+			var dd = new Date();
+			var hh = dd.getHours();
+			var mm = dd.getMinutes();
+			var ss = dd.getSeconds();
+			return hh + ":" + mm + ":" + ss;
+		}
+		this.getdata= function(){alert('');return data}
+		function getRandomArbitrary(min, max) {		
+		  return Math.round (Math.random() * (max - min) + min) -1;
+		}
+
+		function getTime(cpuusage) {
+		  if(data.length === 25) {
+			// when length of data equal 60 then pop data[0]
+			data.shift();
+		  }
+		  data.push({
+			  "creatTime":  myGetTime(),
+			  "cpuTime": cpuusage,
+		  });
+		}
+		
+		function update() {
+		 //alert('')	
+		  //getTime(getRandomArbitrary(0,101));
+		  //getTime(0)
+		  render(objid,data);//render("chart2",data);
+		  //timeoutId = setTimeout(function(){update()}, 1000);
+		}
+		this._gettime = function(as){		  
+		  if(data.length === 200) {
+			// when length of data equal 60 then pop data[0]
+			data.shift();
+		  }
+		  data.push({
+			  "creatTime":  myGetTime(),
+			  "cpuTime": as,
+		  });
+		  update()
+		;}
+		function render(objid,objdata) {
+		
+			//alert(objdata)
+			//d3.select("#"+objid)
+			//	   .remove();
+			 document.getElementById(objid).innerHTML = ""
+			var svg = d3.select("#"+objid).append("svg")
+				.attr("width", width + margin.left + margin.right)
+				.attr("height", height + margin.top + margin.bottom + 40)
+			  .append("g")
+				.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+			  
+			 objdata.forEach(function(d) {
+				 if(typeof d.creatTime === "string") {
+				   d.cpuTime = +d.cpuTime;
+					d.creatTime = parseDate(d.creatTime);
+				 }
+						 
+			 });
+			  
+			  x.domain(d3.extent(objdata, function(d) { return d.creatTime; }));
+			  y.domain(d3.extent(objdata, function(d) { return d.cpuTime; }));
+
+			  svg.append("g")
+				  .attr("class", "x axis")
+				  .attr("transform", "translate(0," + height + ")")
+				  .style("text-anchor", "end")
+				  .style("fill", "white")  
+				  .call(xAxis) 
+			  .append("text")
+				  .attr("transform", "rotate(0)")
+				  .attr("y", 40)
+				  .attr("dx", xcenter)
+				  .attr("font-size", "1.3em")
+				  .style("text-anchor", "end")
+				  .style("fill", "white")  
+				  .text("time(s)");
+				 
+			  svg.append("g")
+				  .attr("class", "y axis")
+				  .attr("transform", "translate("+ height +",-180px)")
+				  .style("text-anchor", "end")
+				  .style("fill", "white")  
+				  .call(yAxis)
+			   .append("text")
+				  .attr("transform", "rotate(-90)")
+				  .attr("y", -40)
+				  .attr("dy", ".41em")
+				  .attr("font-size", "1.3em")
+				  .style("text-anchor", "end")
+				  .style("fill", "white")  
+				  .text(cpuText);
+
+			  svg.append("path")
+				  .datum(objdata)
+				  .attr("class", "line")
+				  .attr("d", line);
+		}
+
+		// Start
+		update();	
+	}
+
+
+	</script>	
+	
+	
+	
+   <script>  
+	var Cpus =[];
+	var Initialised= false;
+	//var mychrt = new chrt("chart1");
+	//var mychrt2 = new chrt("chart2");
+ 
+    var eventList = document.getElementById("eventlist");
+    var evtSource = new EventSource("http://localhost:4000/msg");
+	var NumberOfCpu =0;
+	var DivsDrawn = false
+    var newElement = document.createElement("li");
+    newElement.innerHTML = ":";
+    eventList.appendChild(newElement);
+
+
+    evtSource.onmessage = function(e) {
+        console.log("received event");
+		console.log(e);
+		if(!Initialised){
+			//initialise(e);
+			NumberOfCpu = JSON.parse(e.data).totalCpu
+			CreateDiv(NumberOfCpu);			
+		}
+        if(JSON.parse(e.data).Tool!=''){
+        var newElement = document.createElement("li");
+        newElement.innerHTML = "" + JSON.parse(e.data).Tool;
+        eventList.appendChild(newElement);
+        }
+		document.getElementById("totalmem").innerHTML=JSON.parse(e.data).TotalMem +" GB"
+		document.getElementById("freemem").innerHTML=JSON.parse(e.data).FreeMem +" GB"
+		
+		for(i=0;i<Cpus.length;i++){
+			Cpus[i]._gettime(JSON.parse(e.data).CpuLoad.split(",")[i])
+			console.log(Cpus.length)
+		}
+        var objDiv = document.getElementById("fulllist");
+        objDiv.scrollTop = objDiv.scrollHeight;
+       // document.getElementById("cpu-usage").appendChild(document.createElement("p").innerHTML =JSON.parse(e.data).CpuLoad);
+    };      
+
+    evtSource.onerror = function(e) {
+        console.log("EventSource failed.");
+    };
+
+	console.log(evtSource);
+	
+	function initialise(e){
+		var tempVar="chart"
+		var Cpucnt=JSON.parse(e.data).totalCpu;
+		for (i = 0; i <= Cpucnt.length; i++) { 
+			Cpus.push(tempVar+"_"+i);
+			Initialised=true;
+			console.log("Cpu Obj"+ Cpus)
+		}	
+	}
+	function CreateDiv(nos){
+		if (!DivsDrawn){
+			for(i=1;i<=nos;i++){
+				document.getElementById("chartcontainer").innerHTML=document.getElementById("chartcontainer").innerHTML + "<div class='mchart col' id='chart_"+i+"'>&nbsp;&nbsp;</div>";
+				Cpus.push(new chrt("chart_"+i,"CPU"+i+" %"));
+				//document.getElementById("numberofcpu").innerHTML=document.getElementById("numberofcpu").innerHTML+i
+			}
+			console.log("Cpu Obj"+ Cpus)
+			Initialised=true;	
+			DivsDrawn = true;			
+		}
+	}
+	
+    </script>
+
+	
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>

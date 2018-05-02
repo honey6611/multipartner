@@ -2,14 +2,14 @@
     "provider":{
         "p2p":{
            "id" :123,
-           "active":1
+           "active":0
         },
         "taxicode" :{
-            "id":234,
-            "active":1
+            "id":631,
+            "active":0
         },
         "mozio":{
-            "id":345,
+            "id":873,
             "active":1
         }
     },

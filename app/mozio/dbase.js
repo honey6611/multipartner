@@ -5,6 +5,7 @@ let _ = require('lodash');
 let moment = require('moment')
 let querystring = require('querystring');
 var fs = require('fs');
+var setting = require('../../config/settings.json');
 
 module.exports = async function insert(result,sessionid,tflag,callback){
 
@@ -12,17 +13,19 @@ module.exports = async function insert(result,sessionid,tflag,callback){
     var PriceID,Vehiclename,VehicleImage,passenger,luggage_big,luggage_small,NumUnits,id,vehicleclass,Transferflag,sessionid,OccupancyFrom
     var CurID,UnitID,Min_Stops,Max_Stops,Transferflag,company_sessionid,company_searchid
     var Luggage_Big,Luggage_Small,PartnerRating,PartnerReviewCount
+    var extras,extrasXml
     var json = JSON.parse(result); 
     var table
     // try{await sql.close(); }                    
     // catch(err){console.log("connection close error :" + err)}    
    
     try {
-        if(json.results[0]!==undefined ){
+        if(getSafe(() => json.results[0], '') !='' ){
             debugger;
             PriceID=0;
             sessionid= sessionid;
-            CurID=json.currency_info.code;
+            //CurID= json.currency_info.code ;
+            CurID= getSafe(() => json.currency_info.code, '');
             passenger= json.num_passengers;
             OccupancyTo=passenger;
             company_sessionid = json.search_id;
@@ -44,7 +47,23 @@ module.exports = async function insert(result,sessionid,tflag,callback){
                 duration= json.results[key].steps[0].details.time;
                 Luggage_Big = json.results[key].steps[0].details.vehicle.max_bags;
                 PartnerRating = json.results[key].steps[0].details.provider.rating;
-                Transferflag=tflag
+                Transferflag=tflag;
+                extras =json.results[key].steps[0].details.amenities;
+                extrasXml="";
+                //console.log(extras.length)
+                if(extras.length>0){
+
+                    for(var i=0;i<extras.length;i++){
+                        extrasXml= extrasXml+`<Avline count="${i+1}">`
+                        extrasXml= extrasXml+`<ExtrasID>${i}</ExtrasID>`
+                        extrasXml= extrasXml+`<ExtrasCode>${extras[i].key}</ExtrasCode>`
+                        extrasXml= extrasXml+`<Extras_Description>${extras[i].name}</Extras_Description>`
+                        extrasXml= extrasXml+`<Price>${extras[i].price.value}</Price>`
+                        extrasXml= extrasXml+`<MaxNumberOfExtras>1</MaxNumberOfExtras>`
+                        extrasXml= extrasXml+`<Category></Category>`
+                        extrasXml= extrasXml+`</Avline>`
+                    }
+                }
                 if (Transferflag===1){
                     TotalCostPriceSingle=Price;
                     TotalCostPriceReturn=0;
@@ -59,11 +78,11 @@ module.exports = async function insert(result,sessionid,tflag,callback){
                  //let result1 = pool.request()
                  //console.log(sqlQuery)
                  var request = new sql.Request(sqlConn);
-                 let result = sql.query `INSERT INTO APISearchData (sessionid,PriceID,SearchTimeStamp,Pricing,Distance,UnitID,Vehicle,VehicleClass,OccupancyFrom,OccupancyTo,CurID,TotalCostPriceSingle,TotalCostPriceReturn,Min_Stops,Max_Stops,NumUnits,company_logo,Transferflag,VehicleImage,company,TransferType,company_sessionid,company_search_Resultid,duration,luggage_Big, PartnerRating)
-                 values (${sessionid},${PriceID},getdate(),${Pricing},${Distance},${UnitID},${Vehiclename},${vehicleclass},${OccupancyFrom},${OccupancyTo},${CurID},${TotalCostPriceSingle},${TotalCostPriceReturn},${Min_Stops},${Max_Stops},${NumUnits},${company_logo},${Transferflag},${VehicleImage},${company_name},2,${company_sessionid},${company_searchid},${duration},${Luggage_Big},${PartnerRating})`                   
+                 let result = sql.query `INSERT INTO APISearchData (sessionid,PriceID,SearchTimeStamp,Pricing,Distance,UnitID,Vehicle,VehicleClass,OccupancyFrom,OccupancyTo,CurID,TotalCostPriceSingle,TotalCostPriceReturn,Min_Stops,Max_Stops,NumUnits,company_logo,Transferflag,VehicleImage,company,TransferType,company_sessionid,company_search_Resultid,duration,luggage_Big, PartnerRating,supplierid,extras)
+                 values (${sessionid},${PriceID},getdate(),${Pricing},${Distance},${UnitID},${Vehiclename},${vehicleclass},${OccupancyFrom},${OccupancyTo},${CurID},${TotalCostPriceSingle},${TotalCostPriceReturn},${Min_Stops},${Max_Stops},${NumUnits},${company_logo},${Transferflag},${VehicleImage},${company_name},2,${company_sessionid},${company_searchid},${duration},${Luggage_Big},${PartnerRating},${setting.provider.mozio.id},${extrasXml})`                   
 
             })
-    
+     
             callback('','Success')
             return;
         }
@@ -79,4 +98,12 @@ module.exports = async function insert(result,sessionid,tflag,callback){
         console.error('Unhandled Rejection at: Promise', p, 'reason:', reason);
         return;
       });
+}
+
+function getSafe(fn, defaultVal) {
+    try {
+        return fn();
+    } catch (e) {
+        return defaultVal;
+    }
 }
