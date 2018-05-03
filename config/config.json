@@ -1,0 +1,49 @@
+{
+
+    "dev": {   
+        "provider":{
+            "p2p":{
+                "id" :123,
+                "active":1,
+                "sp_name":"Insert_APISearch"
+            },
+            "taxicode" :{
+                "id":631,
+                "active":1,
+                "host":"api.taxicode.com",
+                "api_key":"WIbKkK6MWjbGFjmy",
+                "secret_key":"ac6G7isG0R98SeyE"
+            },
+            "mozio":{
+                "id":873,
+                "active":1,
+                "host":"api-testing.mozio.com",
+                "api_key":"947d9ddec286468cbb3593a857155838"
+            }
+        },
+        "timeout":20000
+    },
+    "prod":{
+        "provider":{
+            "p2p":{
+                "id" :123,
+                "active":1,
+                "sp_name":"Insert_APISearch"
+            },
+            "taxicode" :{
+                "id":631,
+                "active":1,
+                "host":"api.taxicode.com",
+                "api_key":"WIbKkK6MWjbGFjmy",
+                "secret-key":"ac6G7isG0R98SeyE"
+            },
+            "mozio":{
+                "id":873,
+                "active":1,
+                "host":"api-testing.mozio.com",
+                "api_key":"947d9ddec286468cbb3593a857155838"
+            }
+        },
+        "timeout":20000
+    }
+}

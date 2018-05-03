@@ -4,7 +4,7 @@ var sqlConn = sql.globalConnection;
 //const config = require('../config/databaseConnection')
 let _ = require('lodash');
 let moment = require('moment');
-var setting = require('../../config/settings.json');
+var setting = require('../../config');
 
 module.exports = async function insert(result,sessionid,tflag,callback){
     var company_name,company_logo,SearchTimeStamp,quotes,vehicle

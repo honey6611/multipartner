@@ -5,12 +5,9 @@ var conn = require("./config/databaseConnection");
 var TaxiCode  =  require("./app/taxicode/index");
 var p2papi  =  require("./app/p2papi/index");
 var Mozio  =  require("./app/mozio/index"); 
-var CreateLogs = require('./lib/CreateLogs')
+var CreateLogs = require('./lib/CreateLogs');
+var settings = require('./config');
 module.exports=function AsyncCall(request,FullData){
-    //read settings file
-    var fs = require("fs");
-    var content = fs.readFileSync("./config/settings.json");
-    const settings = JSON.parse(content)
     //With Array
     //console.log("From Aync: " +request.id)
     var stack = [];

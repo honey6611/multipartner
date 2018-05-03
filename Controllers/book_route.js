@@ -13,7 +13,7 @@ var express = require('express')
   var CreateLogs = require('../lib/CreateLogs')
   var Taxicode_Booking = require('../app/taxicode/booking');//631
   var Mozio_Booking = require('../app/mozio/booking'); //873
-  var setting = require('../config/settings.json');
+  var setting = require('../config');
   var GetSearchIdDetails = require('../lib/GetSearchIdDetails');
   router.use(GetSearchIdDetails());
 // Expected payload

@@ -1,6 +1,6 @@
 let https = require('https');
 let querystring = require('querystring');
-let setting = require('../../config/settings.json');
+let setting = require('../../config');
 let moment = require('moment');
 var CreateLogs = require('../../lib/CreateLogs');
 var bookingPoll = require('./MozioPoll').BookPoll ;
@@ -55,14 +55,14 @@ var tc_DataToSend=querystring.stringify(sendData)
       //console.log(tc_DataToSend)
 
     var options = {
-        host: 'api-testing.mozio.com',
+        host: setting.provider.mozio.host,
         port: 443,
         method: 'POST',
         path: '/v2/reservations/',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           'Content-Length': Buffer.byteLength(tc_DataToSend),
-          'API-KEY':'947d9ddec286468cbb3593a857155838'
+          'API-KEY':setting.provider.mozio.api_key
         }
       }; 
       

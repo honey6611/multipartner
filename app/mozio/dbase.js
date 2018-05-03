@@ -5,7 +5,7 @@ let _ = require('lodash');
 let moment = require('moment')
 let querystring = require('querystring');
 var fs = require('fs');
-var setting = require('../../config/settings.json');
+var setting = require('../../config');
 
 module.exports = async function insert(result,sessionid,tflag,callback){
 

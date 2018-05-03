@@ -1,14 +1,14 @@
 let https = require('https');
 let querystring = require('querystring');
-let setting = require('../../config/settings.json');
+let setting = require('../../config');
 let moment = require('moment');
 var CreateLogs = require('../../lib/CreateLogs');
 const sql = require('mssql');
 var sqlConn = sql.globalConnection;
 
 module.exports = function booking(data, callback){
-        var tc_apiKey       = "WIbKkK6MWjbGFjmy"
-        var tc_secretKey    = "ac6G7isG0R98SeyE"   
+        var tc_apiKey       = setting.provider.taxicode.api_key; 
+        var tc_secretKey    = setting.provider.taxicode.secret_key ; 
         var tf = moment();  
         var sessionid=data.sessionid;
         var ApisearchDataID = data.id;
@@ -27,7 +27,7 @@ module.exports = function booking(data, callback){
         var tc_DataToSend = `quote=${Quote}&vehicle=${vehicle}&test=1&name=${CustomerName}&email=${Email}&telephone=${Phone}&flight_number=${Journey1_FlightNumber}&notes=${Notes}&key=${tc_apiKey}&method=authorised_payment_handler`      
         //console.log(tc_DataToSend)
         var options = {
-            host: 'api.taxicode.com',
+            host: setting.provider.taxicode.host,
             port: 443,
             timeout: 4000,
             method: 'POST',
