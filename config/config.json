@@ -1,6 +1,6 @@
 {
 
-    "dev": {   
+    "DEV": {   
         "provider":{
             "p2p":{
                 "id" :123,
@@ -23,7 +23,7 @@
         },
         "timeout":20000
     },
-    "prod":{
+    "PROD":{
         "provider":{
             "p2p":{
                 "id" :123,

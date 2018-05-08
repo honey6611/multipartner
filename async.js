@@ -9,7 +9,6 @@ var CreateLogs = require('./lib/CreateLogs');
 var settings = require('./config');
 module.exports=function AsyncCall(request,FullData){
     //With Array
-    //console.log("From Aync: " +request.id)
     var stack = [];
     var retval;
     var test;

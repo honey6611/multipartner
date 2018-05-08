@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha --recursive ./tests",
-    "start": "node default.js"
+    "start": "node default.js",
+    "start:dev": "SET NODE_ENV=DEV & node default.js",
+    "start:prod": "SET NODE_ENV=PROD & node default.js"
   },
   "author": "",
   "license": "ISC",
