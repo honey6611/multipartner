@@ -9,6 +9,6 @@ var settings = (function() {
   console.log(node_env)
   if(node_env=="dev"){console.log("Running in Dev mode")}
   return env[node_env];
-})(); 
+})();  
 
 module.exports = settings
